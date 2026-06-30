@@ -24,10 +24,10 @@
                 name="category"
                 onchange="updateUnits()">
 
-            <option value="length">Длина</option>
-            <option value="mass">Масса</option>
-            <option value="time">Время</option>
-            <option value="volume">Объем</option>
+            <option value="length" {% if selected_category == "length" %}selected{% endif %}>Длина</option>
+            <option value="mass" {% if selected_category == "mass" %}selected{% endif %}>Масса</option>
+            <option value="time" {% if selected_category == "time" %}selected{% endif %}>Время</option>
+            <option value="volume" {% if selected_category == "volume" %}selected{% endif %}>Объем</option>
 
         </select>
 
@@ -37,6 +37,7 @@
                 type="number"
                 step="any"
                 name="value"
+                value="{{ value }}"
                 required>
 
         <label>Из</label>
@@ -65,68 +66,69 @@
 
 <script>
 
+const selectedFrom = "{{ from_unit }}";
+const selectedTo = "{{ to_unit }}";
+
 const units = {
 
     length: [
-        "meter",
-        "kilometer",
-        "centimeter",
-        "millimeter",
-        "mile"
+        "метры",
+        "километры",
+        "сантиметры",
+        "миллиметры",
+        "мили"
     ],
 
     mass: [
-        "kilogram",
-        "gram",
-        "pound",
-        "ton"
+        "килограммы",
+        "граммы",
+        "фунты",
+        "тонны"
     ],
 
     time: [
-        "second",
-        "minute",
-        "hour",
-        "day"
+        "секунды",
+        "минуты",
+        "часы",
+        "дни"
     ],
 
     volume: [
-        "liter",
-        "milliliter",
-        "cubic_meter"
+        "литры",
+        "миллилитры",
+        "кубические метры"
     ]
 };
 
 function updateUnits() {
 
-    const category =
-        document.getElementById("category").value;
+    const category = document.getElementById("category").value;
 
-    const from =
-        document.getElementById("from_unit");
-
-    const to =
-        document.getElementById("to_unit");
+    const from = document.getElementById("from_unit");
+    const to = document.getElementById("to_unit");
 
     from.innerHTML = "";
     to.innerHTML = "";
 
     units[category].forEach(unit => {
 
-        let option1 =
-            document.createElement("option");
-
+        let option1 = document.createElement("option");
         option1.value = unit;
-
         option1.text = unit;
+
+        if (unit === selectedFrom) {
+            option1.selected = true;
+        }
 
         from.appendChild(option1);
 
-        let option2 =
-            document.createElement("option");
-
+        let option2 = document.createElement("option");
         option2.value = unit;
-
         option2.text = unit;
+
+        if (unit === selectedTo) {
+            option2.selected = true;
+        }
 
         to.appendChild(option2);
     });
