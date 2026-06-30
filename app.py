@@ -2,34 +2,33 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-
 UNITS = {
     "length": {
-        "meter": 1,
-        "kilometer": 1000,
-        "centimeter": 0.01,
-        "millimeter": 0.001,
-        "mile": 1609.34
+        "метры": 1,
+        "километры": 1000,
+        "сантиметры": 0.01,
+        "миллиметры": 0.001,
+        "мили": 1609.34
     },
 
     "mass": {
-        "kilogram": 1,
-        "gram": 0.001,
-        "pound": 0.453592,
-        "ton": 1000
+        "килограммы": 1,
+        "граммы": 0.001,
+        "фунты": 0.453592,
+        "тонны": 1000
     },
 
     "time": {
-        "second": 1,
-        "minute": 60,
-        "hour": 3600,
-        "day": 86400
+        "секунды": 1,
+        "минуты": 60,
+        "часы": 3600,
+        "дни": 86400
     },
 
     "volume": {
-        "liter": 1,
-        "milliliter": 0.001,
-        "cubic_meter": 1000
+        "литры": 1,
+        "миллилитры": 0.001,
+        "кубические метры": 1000
     }
 }
 
@@ -44,22 +43,21 @@ def convert(category, value, from_unit, to_unit):
 def index():
 
     result = None
-
     category = "length"
+    value = ""
+    from_unit = ""
+    to_unit = ""
 
     if request.method == "POST":
 
         category = request.form["category"]
-
-        value = float(request.form["value"])
-
+        value = request.form["value"]
         from_unit = request.form["from_unit"]
-
         to_unit = request.form["to_unit"]
 
         result = convert(
             category,
-            value,
+            float(value),
             from_unit,
             to_unit
         )
@@ -68,12 +66,16 @@ def index():
         "index.html",
         units=UNITS,
         result=result,
-        selected_category=category
+        selected_category=category,
+        value=value,
+        from_unit=from_unit,
+        to_unit=to_unit
     )
 
 
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
-        port=5000
+        port=5000,
+        debug=True
     )
